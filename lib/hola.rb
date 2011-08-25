@@ -1,3 +1,5 @@
+require 'hola_ext'
+
 class Hola
   def self.hi(language)
     translator = Translator.new(language)
