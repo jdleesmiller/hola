@@ -13,8 +13,8 @@ Gem::Specification.new do |s|
   s.summary = %q{Hola!}
   s.test_files = ["test/test_hola.rb"]
 
-  s.files = Dir.glob('lib/**/*.rb') + Dir.glob('ext/*.c')
-  s.extensions = ['ext/extconf.rb']
+  s.files = Dir.glob('lib/**/*.rb') + Dir.glob('ext/**/*{.c,.h}')
+  s.extensions = ['ext/hola/extconf.rb']
   s.executables = ['hola']
 end
 

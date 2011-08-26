@@ -1,4 +1,4 @@
-require 'hola_ext'
+require 'hola/hola'
 
 class Hola
   def self.hi(language)

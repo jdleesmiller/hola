@@ -6,7 +6,7 @@ static VALUE hola_bonjour(VALUE self) {
 }
 
 /* this is called by ruby when loading the extension */
-void Init_hola_ext(void) {
+void Init_hola(void) {
   /* assume we haven't yet defined class Hola */
   VALUE klass = rb_define_class("Hola", rb_cObject);
 

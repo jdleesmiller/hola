@@ -1,25 +1,31 @@
 require 'rake/testtask'
 require 'rake/clean'
 
-# rule to build the extension
-file 'ext/hola_ext.so' => %w(ext/extconf.rb ext/hola_ext.c) do
-  Dir.chdir('ext') do
+NAME = 'hola'
+
+# rule to build the extension: this says that the extension should be
+# rebuilt after any change to the source files in ext
+file "lib/#{NAME}/#{NAME}.so" => Dir.glob("ext/#{NAME}/*{.rb,.c}") do
+  # this does essentially the same thing as rubygems does
+  Dir.chdir("ext/#{NAME}") do
     ruby "extconf.rb"
     sh "make"
   end
+  cp "ext/#{NAME}/#{NAME}.so", "lib/#{NAME}"
 end
 
-# build the extension automatically (if needed) when running tests
-task :test => 'ext/hola_ext.so'
+# make the :test task depend on the shared object, so it will be built
+# automatically before running the tests
+task :test => "lib/#{NAME}/#{NAME}.so"
 
-# 'rake clean' and 'rake clobber' get rid of generated files
-CLEAN.include('ext/*{.o,.log}')
-CLEAN.include('ext/Makefile')
-CLOBBER.include('ext/*.so')
+# use 'rake clean' and 'rake clobber' to easily delete generated files
+CLEAN.include('ext/**/*{.o,.log,.so}')
+CLEAN.include('ext/**/Makefile')
+CLOBBER.include('lib/**/*.so')
 
-# tell TestTask to look in 'ext' for 'hola_ext'
+# the same as before
 Rake::TestTask.new do |t|
-  t.libs.push 'test', 'ext'
+  t.libs << 'test'
 end
 
 desc "Run tests"
